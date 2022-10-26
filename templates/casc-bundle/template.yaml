@@ -7,16 +7,17 @@ parameters:
   - name: repoOwner
     type: string
     displayName: GitHub Organization
+    defaultValue: galonsomartinez-kubecon2022
   - name: repository
     type: string
     displayName: GitHub Repository
-    defaultValue: cloudbees-ci-config-bundle
+    defaultValue: controller
   - name: githubCredentialId
     displayName: GitHub Credential ID
     type: CREDENTIALS
-    defaultValue: cloudbees-ci-workshop-github-app
+    defaultValue: cloudbees-ci-previews-demo-github-app
 multibranch:
-  markerFile: .markerfile
+  markerFile: bundle/bundle.yaml
   branchSource:
     github:
       id: cloudbees-ci-config-bundle
@@ -32,12 +33,5 @@ multibranch:
             strategyId: 1
             trust:
               $class: TrustPermission
-        - cloudBeesSCMReporting:
-            handlers:
-            - endBuildError:
-                maxLogLines: 120
-            - "warningsNG"
-            - "jacoco"
-            - stage:
-                verbosity: "failed"
-            - "junit"
+        - headWildcardFilter:
+            includes: main PR-*

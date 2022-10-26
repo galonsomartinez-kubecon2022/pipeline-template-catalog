@@ -13,22 +13,16 @@ pipeline {
     GITHUB_CREDENTIAL_ID = "${githubCredentialId}"
   }
   stages {
-    stage('Pull Request') {
+    stage('Build and Push Container Image') {
       when {
         beforeAgent true
-        anyOf {
-          branch 'pr-*'
-        }
+        branch 'pr-*'
       }
-      stages {
-        stage('Build and Push Container Image') {
-          steps {  
-            echo "building and pushing container image for ${REPO_OWNER}/${REPO_NAME}"
-            containerBuildPushGeneric(REPO_NAME) {
-              checkout scm
-              gitShortCommit()
-            }
-          }
+      steps {  
+        echo "building and pushing container image for ${REPO_OWNER}/${REPO_NAME}"
+        containerBuildPushGeneric(REPO_NAME) {
+          checkout scm
+          gitShortCommit()
         }
       }
     }
